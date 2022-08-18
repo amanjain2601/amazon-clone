@@ -1,7 +1,11 @@
 import React from 'react';
+import { useStatevalue } from '../StateProvider';
+import { useNavigate } from 'react-router-dom';
 import './navbar.css';
 
 function Navbar() {
+  const [{ basket }] = useStatevalue();
+  const navigate = useNavigate();
   return (
     <div className="nav-container">
       <div className="inner-container">
@@ -23,9 +27,9 @@ function Navbar() {
             <p>Return</p>
             <p>& Orders</p>
           </div>
-          <div className="basket-button">
+          <div onClick={() => navigate('/checkout')} className="basket-button">
             <img src="./basket-icon.png" alt="" />
-            <p>0</p>
+            <p>{basket.length}</p>
           </div>
         </div>
       </div>

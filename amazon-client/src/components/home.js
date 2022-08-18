@@ -12,14 +12,54 @@ function Home() {
         <img src="mobile_banner.jpg" alt="" />
       </div>
       <div className="main">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        <Card
+          image={'https://m.media-amazon.com/images/I/61MbLLagiVL._SL1000_.jpg'}
+          price={2500}
+          rating={3}
+          title={'Echo Dot'}
+        />
+        <Card
+          image={'https://m.media-amazon.com/images/I/61MbLLagiVL._SL1000_.jpg'}
+          price={2500}
+          rating={3}
+          title={'Echo Dot'}
+        />
+        <Card
+          image={'https://m.media-amazon.com/images/I/61MbLLagiVL._SL1000_.jpg'}
+          price={2500}
+          rating={3}
+          title={'Echo Dot'}
+        />
+        <Card
+          image={'https://m.media-amazon.com/images/I/61MbLLagiVL._SL1000_.jpg'}
+          price={2500}
+          rating={3}
+          title={'Echo Dot'}
+        />
+        <Card
+          image={'https://m.media-amazon.com/images/I/61MbLLagiVL._SL1000_.jpg'}
+          price={2500}
+          rating={3}
+          title={'Echo Dot'}
+        />
+        <Card
+          image={'https://m.media-amazon.com/images/I/61MbLLagiVL._SL1000_.jpg'}
+          price={2500}
+          rating={3}
+          title={'Echo Dot'}
+        />
+        <Card
+          image={'https://m.media-amazon.com/images/I/61MbLLagiVL._SL1000_.jpg'}
+          price={2500}
+          rating={3}
+          title={'Echo Dot'}
+        />
+        <Card
+          image={'https://m.media-amazon.com/images/I/61MbLLagiVL._SL1000_.jpg'}
+          price={2500}
+          rating={3}
+          title={'Echo Dot'}
+        />
       </div>
     </div>
   );
