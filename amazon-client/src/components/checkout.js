@@ -4,9 +4,11 @@ import Navbar from './navbar';
 import './checkout.css';
 import CurrencyFormat from 'react-currency-format';
 import { getBasketTotal } from '../reducer';
+import { useNavigate } from 'react-router-dom';
 
 function Checkout() {
   const [{ basket }, dispatch] = useStatevalue();
+  const navigate = useNavigate();
 
   const removeFromBasket = (e, id) => {
     e.preventDefault();
@@ -65,7 +67,9 @@ function Checkout() {
             prefix={'$ '}
           />
 
-          <button className="checkout-btn">Proceed to Checkout</button>
+          <button onClick={() => navigate('/address')} className="checkout-btn">
+            Proceed to Checkout
+          </button>
         </div>
       </div>
     </div>
