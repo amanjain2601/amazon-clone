@@ -3,7 +3,7 @@ import './card.css';
 import Rating from '@material-ui/lab/Rating';
 import { useStatevalue } from '../StateProvider';
 
-function Card({ image, title, price, rating }) {
+function Card({ id, image, title, price, rating }) {
   const [{ basket }, dispatch] = useStatevalue();
   const addToBasket = (e) => {
     e.preventDefault();
@@ -11,6 +11,7 @@ function Card({ image, title, price, rating }) {
     dispatch({
       type: 'ADD_TO_BASKET',
       item: {
+        id,
         title,
         price,
         image,
@@ -24,7 +25,7 @@ function Card({ image, title, price, rating }) {
       <div className="card-image">
         <img src={image} alt="" />
       </div>
-      <div className="description">
+      <div className="prod-description">
         <h5>{title}</h5>
         <Rating
           name="half-rating-read"
@@ -33,7 +34,9 @@ function Card({ image, title, price, rating }) {
           readOnly
         />
         <p>$ {price}</p>
-        <button onClick={addToBasket}>Add to Cart</button>
+        <button className="add-btn" onClick={addToBasket}>
+          Add to Cart
+        </button>
       </div>
     </div>
   );
