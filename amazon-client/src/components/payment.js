@@ -85,7 +85,7 @@ function Payment() {
               prefix={'$ '}
             />
 
-            <button className="checkout-btn">Place Order</button>
+            <button className="place-order-btn">Place Order</button>
           </div>
         </div>
       </div>
