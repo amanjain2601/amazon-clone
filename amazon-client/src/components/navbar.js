@@ -14,7 +14,7 @@ function Navbar() {
         </div>
         <div className="search-bar">
           <input type="text" placeholder="Search..." />
-          <div className="search-icon">
+          <div onClick={() => navigate('/addproduct')} className="search-icon">
             <img src="./searchIcon.png" alt="" />
           </div>
         </div>
@@ -35,7 +35,7 @@ function Navbar() {
       </div>
       <div className="mobile-search-bar">
         <input type="text" placeholder="Search..." />
-        <div className="search-icon">
+        <div onClick={() => navigate('/addproduct')} className="search-icon">
           <img src="./searchIcon.png" alt="" />
         </div>
       </div>
