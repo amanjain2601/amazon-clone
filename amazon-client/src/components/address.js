@@ -3,6 +3,7 @@ import Navbar from './navbar';
 import './address.css';
 import { useState } from 'react';
 import { useStatevalue } from '../StateProvider';
+import { useNavigate } from 'react-router-dom';
 
 function Address() {
   const [{}, dispatch] = useStatevalue();
@@ -13,6 +14,8 @@ function Address() {
   const [landMark, setLandMark] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
+
+  const navigate = useNavigate();
 
   const deliver = (e) => {
     e.preventDefault();
@@ -28,6 +31,8 @@ function Address() {
         state,
       },
     });
+
+    navigate('/payment');
   };
 
   return (
