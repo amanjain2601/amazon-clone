@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStatevalue } from '../StateProvider';
 import Navbar from './navbar';
 import './payment.css';
@@ -6,12 +6,47 @@ import CurrencyFormat from 'react-currency-format';
 import { getBasketTotal } from '../reducer';
 import { useNavigate } from 'react-router-dom';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import axios from '../axios';
 
 function Payment() {
-  const [{ basket, address }] = useStatevalue();
+  const [{ basket, address }, dispatch] = useStatevalue();
 
+  const [clientSecret, setClientSecret] = useState('');
   const elements = useElements();
   const stripe = useStripe();
+
+  useEffect(() => {
+    const fetchClientSecret = async () => {
+      const data = await axios.post('/payment/create', {
+        amount: Math.round(getBasketTotal(basket) * 100),
+      });
+      console.log(data.data.clientSecret);
+      setClientSecret(data.data.clientSecret);
+    };
+
+    fetchClientSecret();
+  }, []);
+
+  const confirmPayment = async (e) => {
+    e.preventDefault();
+
+    await stripe
+      .confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+        },
+      })
+      .then((result) => {
+        alert('Payment Sucessfull');
+        dispatch({
+          type: 'EMPTY_BASKET',
+        });
+        navigate('/');
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  };
 
   const navigate = useNavigate();
   return (
@@ -85,7 +120,9 @@ function Payment() {
               prefix={'$ '}
             />
 
-            <button className="place-order-btn">Place Order</button>
+            <button onClick={confirmPayment} className="place-order-btn">
+              Place Order
+            </button>
           </div>
         </div>
       </div>

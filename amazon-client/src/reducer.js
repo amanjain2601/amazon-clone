@@ -40,6 +40,12 @@ const reducer = (state, action) => {
         address: { ...action.item },
       };
 
+    case 'EMPTY_BASKET':
+      return {
+        ...state,
+        basket: [],
+      };
+
     default:
       return state;
   }
