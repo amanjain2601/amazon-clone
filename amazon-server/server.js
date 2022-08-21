@@ -42,6 +42,17 @@ app.post('/products/add', (req, res) => {
   });
 });
 
+//get product
+app.get('/products/get', (req, res) => {
+  Products.find((err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(data);
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log(`server is running at port ${port}`);
 });
