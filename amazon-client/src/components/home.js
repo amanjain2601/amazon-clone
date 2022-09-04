@@ -3,18 +3,34 @@ import Navbar from './navbar';
 import './home.css';
 import Card from './card';
 import axios from '../axios';
+import { useStatevalue } from '../StateProvider';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
   const [products, setProducts] = useState('');
+  const navigate = useNavigate();
+  const [{ basket }, dispatch] = useStatevalue();
 
   useEffect(() => {
     const fetchdata = async () => {
-      const data = await axios.get('/products/get');
-      setProducts(data);
+      try {
+        const data = await axios.get('/products/get');
+
+        setProducts(data);
+
+        const userDetail = await axios.get('/userInfo/get');
+        dispatch({
+          type: 'SET_USER',
+          userid: userDetail.data.email,
+          basket: userDetail.data.basket,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     fetchdata();
-  });
+  }, []);
 
   return (
     <div className="home-container">

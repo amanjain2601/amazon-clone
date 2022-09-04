@@ -2,14 +2,28 @@ import React from 'react';
 import { useStatevalue } from '../StateProvider';
 import { useNavigate } from 'react-router-dom';
 import './navbar.css';
+import axios from '../axios';
 
 function Navbar() {
-  const [{ basket }] = useStatevalue();
+  const [{ basket, user, address }, dispatch] = useStatevalue();
   const navigate = useNavigate();
+
+  const logOut = async () => {
+    await axios.post('/logout', {
+      basket,
+      user,
+    });
+    dispatch({
+      type: 'LOGOUT_USER',
+    });
+
+    navigate('/login');
+  };
+
   return (
     <div className="nav-container">
       <div className="inner-container">
-        <div className="home-logo">
+        <div className="home-logo" onClick={() => navigate('/')}>
           <img src="./amazon_logo1.png" alt="" />
         </div>
         <div className="search-bar">
@@ -21,9 +35,13 @@ function Navbar() {
         <div className="right-container">
           <div className="nav-button">
             <p>Hello</p>
-            <p>Guest</p>
+            {user ? (
+              <p onClick={logOut}>{user}</p>
+            ) : (
+              <p onClick={() => navigate('/login')}>Sign In</p>
+            )}
           </div>
-          <div className="nav-button">
+          <div className="nav-button" onClick={() => navigate('/orders')}>
             <p>Return</p>
             <p>& Orders</p>
           </div>

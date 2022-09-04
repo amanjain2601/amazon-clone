@@ -9,7 +9,7 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import axios from '../axios';
 
 function Payment() {
-  const [{ basket, address }, dispatch] = useStatevalue();
+  const [{ basket, user, address }, dispatch] = useStatevalue();
 
   const [clientSecret, setClientSecret] = useState('');
   const elements = useElements();
@@ -20,7 +20,7 @@ function Payment() {
       const data = await axios.post('/payment/create', {
         amount: Math.round(getBasketTotal(basket) * 100),
       });
-      console.log(data.data.clientSecret);
+
       setClientSecret(data.data.clientSecret);
     };
 
@@ -37,7 +37,13 @@ function Payment() {
         },
       })
       .then((result) => {
-        alert('Payment Sucessfull');
+        axios.post('/orders/add', {
+          basket: basket,
+          price: getBasketTotal(basket),
+          email: user,
+          address: { ...address },
+        });
+
         dispatch({
           type: 'EMPTY_BASKET',
         });
