@@ -47,11 +47,13 @@
 .description h4 {
   font-weight: 600;
   font-size: 18px;
+  margin-left: 15px;
 }
 
 .description p {
   font-weight: 600;
   margin-top: 10px;
+  margin-left: 15px;
 }
 
 .remove-btn {
@@ -61,6 +63,7 @@
   outline: none;
   margin-top: 10px;
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .remove-btn:hover {
@@ -100,6 +103,12 @@
   border: none;
   outline: none;
   border-radius: 8px;
+}
+
+@media only screen and (max-width: 767px) {
+  .product-image img {
+    height: 100px;
+  }
 }
 
 @media only screen and (max-width: 1200px) {
