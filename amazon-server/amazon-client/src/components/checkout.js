@@ -1,23 +1,54 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useStatevalue } from '../StateProvider';
 import Navbar from './navbar';
 import './checkout.css';
 import CurrencyFormat from 'react-currency-format';
 import { getBasketTotal } from '../reducer';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Checkout() {
-  const [{ basket }, dispatch] = useStatevalue();
+  const [{ basket, user }, dispatch] = useStatevalue();
   const navigate = useNavigate();
 
-  const removeFromBasket = (e, id) => {
+  const removeFromBasket = async (e, id) => {
     e.preventDefault();
 
-    dispatch({
+    await dispatch({
       type: 'REMOVE_FROM_BASKET',
       id: id,
     });
+
+    const index = basket.findIndex((basketItem) => basketItem.id === id);
+
+    basket.splice(index, 1);
+
+    await axios.post('/saveUserBasket', {
+      basket,
+      user,
+    });
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch('/userInfo/get', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const userDetail = await res.json();
+
+      dispatch({
+        type: 'SET_USER',
+        userid: userDetail.email,
+        basket: userDetail.basket,
+      });
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="checkout-container">

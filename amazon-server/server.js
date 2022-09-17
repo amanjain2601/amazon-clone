@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const mongoose = require('mongoose');
+const path = require('path');
 const Products = require('./products');
 const Order = require('./order');
 const User = require('./user');
@@ -13,14 +14,25 @@ const stripe = require('stripe')(
   'sk_test_51L71A9SJy80HPv0GrWRL2UDk1elNM4ljeCrpvKGj3f9HQniyjcsxLQEZVYrgruEVRt0WPdscMpv9qylesGkEeHI300BGkgPcg5'
 );
 
-const port = 8000;
+const port = process.env.PORT || 8000;
 const bcrypt = require('bcryptjs');
 
 dotenv.config({ path: './config.env' });
+app.set('trust proxy', 1);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      'https://amazon-backend-mern.herokuapp.com',
+      'http://localhost:8000',
+    ],
+    methods: ['GET', 'POST'],
+    credentials: true,
+    origin: true,
+  })
+);
 app.use(cookieParser());
 
 //connection URL
@@ -38,10 +50,6 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-
-app.get('/', (req, res) => {
-  res.send('Hello world');
-});
 
 //add product
 app.post('/products/add', (req, res) => {
@@ -105,11 +113,12 @@ app.post('/login', async (req, res) => {
 
       const token = await userLogin.generateAuthToken();
 
+      console.log(token);
+
       let expiryDate = new Date(Number(new Date()) + 315360000000);
       res.cookie('jwtoken', token, {
         expires: expiryDate,
         httpOnly: true,
-        secure: true,
       });
 
       if (!isMatch) {
@@ -135,6 +144,19 @@ app.post('/logout', async (req, res) => {
     await userId.saveBasket(basket);
 
     res.status(200).send('User Logout');
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post('/saveUserBasket', async (req, res) => {
+  try {
+    const { basket, user } = req.body;
+
+    const userId = await User.findOne({ email: user });
+    await userId.saveBasket(basket);
+
+    res.status(200).send(userId);
   } catch (err) {
     console.log(err);
   }
@@ -209,6 +231,14 @@ app.post('/orders/get', (req, res) => {
     }
   });
 });
+
+if (process.env.NODE_ENV == 'production') {
+  app.use(express.static('amazon-client/build'));
+
+  app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, './amazon-client/build/index.html'));
+  });
+}
 
 app.listen(port, () => {
   console.log(`server is running at port ${port}`);

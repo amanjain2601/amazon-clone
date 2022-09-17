@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
 import './home.css';
 import Card from './card';
-import axios from '../axios';
+import axios from 'axios';
 import { useStatevalue } from '../StateProvider';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
   const [products, setProducts] = useState('');
   const navigate = useNavigate();
-  const [{ basket }, dispatch] = useStatevalue();
+  const [{ basket, user }, dispatch] = useStatevalue();
 
   useEffect(() => {
     const fetchdata = async () => {
@@ -18,11 +18,19 @@ function Home() {
 
         setProducts(data);
 
-        const userDetail = await axios.get('/userInfo/get');
+        const res = await fetch('/userInfo/get', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const userDetail = await res.json();
+
         dispatch({
           type: 'SET_USER',
-          userid: userDetail.data.email,
-          basket: userDetail.data.basket,
+          userid: userDetail.email,
+          basket: userDetail.basket,
         });
       } catch (err) {
         console.log(err);

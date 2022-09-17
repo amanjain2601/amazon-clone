@@ -39,6 +39,7 @@ userSchema.methods.generateAuthToken = async function () {
 };
 
 userSchema.methods.saveBasket = async function (basket) {
+  console.log(basket);
   try {
     let token = jwt.sign({ _id: this._id }, process.env.SECRET_KEY);
     this.basket = basket;

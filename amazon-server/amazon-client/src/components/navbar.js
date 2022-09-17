@@ -2,7 +2,7 @@ import React from 'react';
 import { useStatevalue } from '../StateProvider';
 import { useNavigate } from 'react-router-dom';
 import './navbar.css';
-import axios from '../axios';
+import axios from 'axios';
 
 function Navbar() {
   const [{ basket, user, address }, dispatch] = useStatevalue();

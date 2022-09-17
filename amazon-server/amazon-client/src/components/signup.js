@@ -1,29 +1,32 @@
 import React, { useState } from 'react';
 import './login.css';
+import './signup.css';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import axios from '../axios';
 
-function Login() {
+function Signup() {
   const navigate = useNavigate();
 
+  const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const logIn = (e) => {
+  const createAccount = (e) => {
     e.preventDefault();
 
     axios
-      .post('/login', {
+      .post('/register', {
+        userName,
         email,
         password,
+        confirmPassword,
       })
       .then((result) => {
-        if (result.data.message === 'user signed in successfully') {
-          navigate('/');
-        }
+        console.log(result);
       })
-      .catch((error) => {
-        alert('Invalid Credentials');
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -32,9 +35,17 @@ function Login() {
       <div className="logo" onClick={() => navigate('/')}>
         <img src="./amazon_logo.png" alt="" />
       </div>
-
-      <form>
-        <h3>Sign-In</h3>
+      <form className="signup-form">
+        <h3>Sign-Up</h3>
+        <div className="input-container">
+          <p>FullName</p>
+          <input
+            type="text"
+            placeholder="John Smith"
+            onChange={(e) => setUserName(e.target.value)}
+            value={userName}
+          />
+        </div>
         <div className="input-container">
           <p>Email</p>
           <input
@@ -55,19 +66,30 @@ function Login() {
           />
         </div>
 
-        <button onClick={logIn}>LogIn</button>
+        <div className="input-container">
+          <p>Confirm Password</p>
+          <input
+            type="password"
+            placeholder="********"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={confirmPassword}
+          />
+        </div>
+
+        <button onClick={createAccount} className="signup-btn">
+          Create Account in Amazon
+        </button>
 
         <p className="infotext">
           By continuing, you agree to Amazon's <span>Conditions of Use </span>
           and <span>Privacy Notice </span>
         </p>
       </form>
-
-      <button onClick={() => navigate('/signup')} className="create-accountbtn">
-        Create Account in Amazon
+      <button onClick={() => navigate('/login')} className="signup-loginbtn">
+        Back to Login
       </button>
     </div>
   );
 }
 
-export default Login;
+export default Signup;

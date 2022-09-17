@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './card.css';
 import Rating from '@material-ui/lab/Rating';
 import { useStatevalue } from '../StateProvider';
+import axios from 'axios';
 
 function Card({ id, image, title, price, rating }) {
-  const [{ basket }, dispatch] = useStatevalue();
-  const addToBasket = (e) => {
+  const [{ basket, user }, dispatch] = useStatevalue();
+  const addToBasket = async (e) => {
     e.preventDefault();
 
-    dispatch({
+    await dispatch({
       type: 'ADD_TO_BASKET',
       item: {
         id,
@@ -17,6 +18,15 @@ function Card({ id, image, title, price, rating }) {
         image,
         rating,
       },
+    });
+
+    basket.push({ id, title, price, image, rating });
+
+    console.log(basket);
+
+    axios.post('/saveUserBasket', {
+      basket,
+      user,
     });
   };
 

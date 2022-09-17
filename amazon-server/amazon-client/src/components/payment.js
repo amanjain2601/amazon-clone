@@ -6,7 +6,7 @@ import CurrencyFormat from 'react-currency-format';
 import { getBasketTotal } from '../reducer';
 import { useNavigate } from 'react-router-dom';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import axios from '../axios';
+import axios from 'axios';
 
 function Payment() {
   const [{ basket, user, address }, dispatch] = useStatevalue();
@@ -16,7 +16,22 @@ function Payment() {
   const stripe = useStripe();
 
   useEffect(() => {
-    const fetchClientSecret = async () => {
+    const fetchClientSecretAndUserData = async () => {
+      const res = await fetch('/userInfo/get', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const userDetail = await res.json();
+
+      dispatch({
+        type: 'SET_USER',
+        userid: userDetail.email,
+        basket: userDetail.basket,
+      });
+
       const data = await axios.post('/payment/create', {
         amount: Math.round(getBasketTotal(basket) * 100),
       });
@@ -24,7 +39,7 @@ function Payment() {
       setClientSecret(data.data.clientSecret);
     };
 
-    fetchClientSecret();
+    fetchClientSecretAndUserData();
   }, []);
 
   const confirmPayment = async (e) => {
@@ -36,7 +51,7 @@ function Payment() {
           card: elements.getElement(CardElement),
         },
       })
-      .then((result) => {
+      .then(async (result) => {
         axios.post('/orders/add', {
           basket: basket,
           price: getBasketTotal(basket),
@@ -44,9 +59,17 @@ function Payment() {
           address: { ...address },
         });
 
-        dispatch({
+        await dispatch({
           type: 'EMPTY_BASKET',
         });
+
+        basket.splice(0, basket.length);
+
+        await axios.post('/saveUserBasket', {
+          basket,
+          user,
+        });
+
         navigate('/');
       })
       .catch((err) => {

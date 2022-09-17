@@ -1,4 +1,4 @@
-import axios from '../axios';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
 import './orders.css';
@@ -10,14 +10,23 @@ function Orders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios
-      .post('/orders/get', {
-        email: user,
-      })
-      .then((res) => {
-        setOrders(res.data);
-      })
-      .catch((err) => {});
+    const getOrders = async () => {
+      const res = await fetch('/orders/get', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: user,
+        }),
+      });
+
+      const data = await res.json();
+
+      setOrders(data);
+    };
+
+    getOrders();
   }, []);
 
   return (
