@@ -3,9 +3,12 @@ import './card.css';
 import Rating from '@material-ui/lab/Rating';
 import { useStatevalue } from '../StateProvider';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Card({ id, image, title, price, rating }) {
   const [{ basket, user }, dispatch] = useStatevalue();
+  const navigate = useNavigate();
+
   const addToBasket = async (e) => {
     e.preventDefault();
 
@@ -22,21 +25,28 @@ function Card({ id, image, title, price, rating }) {
 
     basket.push({ id, title, price, image, rating });
 
-    console.log(basket);
-
     axios.post('/saveUserBasket', {
       basket,
       user,
     });
   };
 
+  const seeProductInfo = () => {
+    dispatch({
+      type: 'VIEW_PRODUCT',
+      id: id,
+    });
+
+    navigate('/prodInfo');
+  };
+
   return (
     <div className="card-container">
-      <div className="card-image">
+      <div className="card-image" onClick={seeProductInfo}>
         <img src={image} alt="" />
       </div>
       <div className="prod-description">
-        <h5>{title}</h5>
+        <h5 onClick={seeProductInfo}>{title}</h5>
         <Rating
           name="half-rating-read"
           defaultValue={rating}

@@ -113,8 +113,6 @@ app.post('/login', async (req, res) => {
 
       const token = await userLogin.generateAuthToken();
 
-      console.log(token);
-
       let expiryDate = new Date(Number(new Date()) + 315360000000);
       res.cookie('jwtoken', token, {
         expires: expiryDate,
@@ -212,8 +210,6 @@ app.post('/orders/add', (req, res) => {
   Order.create(orderDetail, (err, result) => {
     if (err) {
       console.log(err);
-    } else {
-      console.log('order added to database');
     }
   });
 });
@@ -230,6 +226,33 @@ app.post('/orders/get', (req, res) => {
       res.send(userOrders);
     }
   });
+});
+
+app.post('/getProductInfo', (req, res) => {
+  const _id = req.body._id;
+
+  Products.find((err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      const productFound = result.find((product) => {
+        let value = product._id.valueOf();
+        if (value === _id) {
+          return product;
+        }
+      });
+
+      res.send(productFound);
+    }
+  });
+});
+
+app.post('/submitReview', async (req, res) => {
+  const userId = await Products.findOne({ _id: req.body.productId });
+
+  await userId.saveReview(req.body);
+
+  res.status(200).send('Review successfully submitted');
 });
 
 if (process.env.NODE_ENV == 'production') {

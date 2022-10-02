@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from './navbar';
 import './address.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useStatevalue } from '../StateProvider';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,6 +16,27 @@ function Address() {
   const [state, setState] = useState('');
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch('/userInfo/get', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const userDetail = await res.json();
+
+      dispatch({
+        type: 'SET_USER',
+        userid: userDetail.email,
+        basket: userDetail.basket,
+      });
+    };
+
+    fetchData();
+  }, []);
 
   const deliver = (e) => {
     e.preventDefault();

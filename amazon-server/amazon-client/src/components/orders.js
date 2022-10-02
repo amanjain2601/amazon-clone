@@ -5,25 +5,44 @@ import './orders.css';
 import { useStatevalue } from '../StateProvider';
 
 function Orders() {
-  const [{ user }] = useStatevalue();
+  const [{ user }, dispatch] = useStatevalue();
 
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     const getOrders = async () => {
-      const res = await fetch('/orders/get', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: user,
-        }),
-      });
+      try {
+        const result = await fetch('/userInfo/get', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-      const data = await res.json();
+        const userDetail = await result.json();
 
-      setOrders(data);
+        dispatch({
+          type: 'SET_USER',
+          userid: userDetail.email,
+          basket: userDetail.basket,
+        });
+
+        const res = await fetch('/orders/get', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: userDetail.email,
+          }),
+        });
+
+        const data = await res.json();
+
+        setOrders(data);
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     getOrders();

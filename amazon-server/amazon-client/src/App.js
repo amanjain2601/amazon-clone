@@ -10,6 +10,8 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import Addproduct from './components/addproduct';
 import Orders from './components/orders';
+import ProductInfo from './components/productInfo';
+import ReviewProduct from './components/reviewProduct';
 
 const promise = loadStripe(
   'pk_test_51L71A9SJy80HPv0GKSTDj9YaHhD5C44iZP9fkwHs3CYfNDJ4Pnm3XeMHUr59DMoBen8YuDHmZsf3qPdGOXdLvcBM00pFlNqyXQ'
@@ -34,6 +36,8 @@ function App() {
         />
         <Route path="/addproduct" element={<Addproduct />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/prodInfo" element={<ProductInfo />} />
+        <Route path="/review" element={<ReviewProduct />} />
       </Routes>
     </div>
   );

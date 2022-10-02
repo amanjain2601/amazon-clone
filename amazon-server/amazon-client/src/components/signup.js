@@ -15,19 +15,41 @@ function Signup() {
   const createAccount = (e) => {
     e.preventDefault();
 
-    axios
-      .post('/register', {
+    fetch('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         userName,
         email,
         password,
         confirmPassword,
-      })
+      }),
+    })
       .then((result) => {
-        console.log(result);
+        alert('User successfully created');
+        navigate('/login');
       })
       .catch((err) => {
         console.log(err);
       });
+
+    // axios
+    //   .post('/register', {
+    //     userName,
+    //     email,
+    //     password,
+    //     confirmPassword,
+    //   })
+    //   .then((result) => {
+    //     console.log(result);
+    //     alert('User successfully created');
+    //     navigate('/login');
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   return (

@@ -20,7 +20,7 @@
 
 .home-logo img {
   width: 100px;
-  margin-top: 10px;
+  margin-top: 20%;
 }
 
 .search-bar {
@@ -29,6 +29,7 @@
   margin: 0px 15px;
   display: flex;
   align-items: center;
+  margin-bottom: 1%;
 }
 
 .search-bar input {
@@ -51,6 +52,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 0px 5px 5px 0px;
+  margin-top: 2%;
+  margin-left: 1%;
 }
 
 .search-icon img {
