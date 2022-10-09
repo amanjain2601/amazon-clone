@@ -1,0 +1,45 @@
+.review-container-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.review-prod-image {
+  margin: auto;
+}
+
+.review-prod-image img {
+  width: 300px;
+  height: 300px;
+}
+
+form {
+  height: 30%;
+  border-radius: 2%;
+  border: 2% solid yellow;
+}
+
+input {
+  margin-top: 2%;
+}
+
+textarea {
+  width: 400px;
+  height: auto;
+  margin-top: 5%;
+}
+
+@media only screen and (min-width: 400px) and (max-width: 750px) {
+  textarea {
+    width: 200px;
+    height: auto;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  textarea {
+    width: 150px;
+    height: auto;
+  }
+}
