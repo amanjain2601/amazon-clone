@@ -11,6 +11,15 @@ function Checkout() {
   const [{ basket, user }, dispatch] = useStatevalue();
   const navigate = useNavigate();
 
+  const clickCheckoutButton = () => {
+    console.log(user);
+    if (!user) {
+      navigate('/login');
+    } else {
+      navigate('/address');
+    }
+  };
+
   const removeFromBasket = async (e, id) => {
     e.preventDefault();
 
@@ -23,6 +32,10 @@ function Checkout() {
 
     basket.splice(index, 1);
 
+    if (!user) {
+      window.localStorage.setItem('storedBasket', JSON.stringify(basket));
+    }
+
     await axios.post('/saveUserBasket', {
       basket,
       user,
@@ -31,20 +44,30 @@ function Checkout() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch('/userInfo/get', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      try {
+        const res = await fetch('/userInfo/get', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-      const userDetail = await res.json();
+        const userDetail = await res.json();
 
-      dispatch({
-        type: 'SET_USER',
-        userid: userDetail.email,
-        basket: userDetail.basket,
-      });
+        dispatch({
+          type: 'SET_USER',
+          userid: userDetail.email,
+          basket: userDetail.basket,
+        });
+      } catch (err) {
+        if (Object.keys(localStorage['storedBasket'].length !== 0)) {
+          dispatch({
+            type: 'SET_USER',
+            userid: '',
+            basket: JSON.parse(window.localStorage.getItem('storedBasket')),
+          });
+        }
+      }
     };
 
     fetchData();
@@ -98,7 +121,7 @@ function Checkout() {
             prefix={'$ '}
           />
 
-          <button onClick={() => navigate('/address')} className="checkout-btn">
+          <button onClick={clickCheckoutButton} className="checkout-btn">
             Proceed to Checkout
           </button>
         </div>

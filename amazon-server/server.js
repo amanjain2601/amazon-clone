@@ -151,10 +151,12 @@ app.post('/saveUserBasket', async (req, res) => {
   try {
     const { basket, user } = req.body;
 
-    const userId = await User.findOne({ email: user });
-    await userId.saveBasket(basket);
+    if (user) {
+      const userId = await User.findOne({ email: user });
+      await userId.saveBasket(basket);
 
-    res.status(200).send(userId);
+      res.status(200).send(userId);
+    }
   } catch (err) {
     console.log(err);
   }

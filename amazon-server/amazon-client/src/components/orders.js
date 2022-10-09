@@ -3,9 +3,12 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
 import './orders.css';
 import { useStatevalue } from '../StateProvider';
+import { useNavigate } from 'react-router-dom';
 
 function Orders() {
   const [{ user }, dispatch] = useStatevalue();
+
+  const navigate = useNavigate();
 
   const [orders, setOrders] = useState([]);
 
@@ -41,6 +44,7 @@ function Orders() {
 
         setOrders(data);
       } catch (err) {
+        navigate('/login');
         console.log(err);
       }
     };

@@ -33,7 +33,14 @@ function Home() {
           basket: userDetail.basket,
         });
       } catch (err) {
-        console.log(err);
+        if (Object.keys(localStorage['storedBasket'].length !== 0)) {
+          dispatch({
+            type: 'SET_USER',
+            userid: '',
+            basket: JSON.parse(window.localStorage.getItem('storedBasket')),
+          });
+        }
+        //console.log(err);
       }
     };
 

@@ -25,6 +25,10 @@ function Card({ id, image, title, price, rating }) {
 
     basket.push({ id, title, price, image, rating });
 
+    if (!user) {
+      window.localStorage.setItem('storedBasket', JSON.stringify(basket));
+    }
+
     axios.post('/saveUserBasket', {
       basket,
       user,
